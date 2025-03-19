@@ -31,9 +31,7 @@ class ShaderDoodleElement extends SDNodeElement {
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.renderer.removeSurface(this.surface);
-    this.surface.dispose();
-    this.surface = undefined;
+    this.cleanup();
   }
 
   attributeChangedCallback(name) {
@@ -72,11 +70,56 @@ class ShaderDoodleElement extends SDNodeElement {
     this.setAttribute('width', width);
   }
 
-  async init() {
-    await super.init();
+  cleanup() {
+    if (this.surface) {
+      this.renderer.removeSurface(this.surface);
+      this.surface.dispose();
+      this.surface = undefined;
+    }
+  }
 
-    this.surface = Surface(this);
-    this.renderer.addSurface(this.surface);
+  async update() {
+    try {
+      this.cleanup();
+      await this.init();
+    } catch (error) {
+      const errorEvent = new CustomEvent('shader-error', {
+        detail: {
+          message: error.message || 'Error updating shader',
+          error: error,
+        },
+        bubbles: true,
+        composed: true,
+      });
+      this.dispatchEvent(errorEvent);
+      console.error(error);
+    }
+  }
+
+  async init() {
+    try {
+      await super.init();
+      this.surface = Surface(this);
+      this.renderer.addSurface(this.surface);
+    } catch (error) {
+      const errorEvent = new CustomEvent('shader-error', {
+        detail: {
+          message: error.message || 'Error initializing shader',
+          error: error,
+        },
+        bubbles: true,
+        composed: true,
+      });
+      this.dispatchEvent(errorEvent);
+      throw error;
+    }
+    const successEvent = new CustomEvent('shader-success', {
+      detail: {},
+      bubbles: true,
+      composed: true,
+    });
+
+    this.dispatchEvent(successEvent);
   }
 }
 

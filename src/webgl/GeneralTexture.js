@@ -1,6 +1,5 @@
 import Texture from './Texture.js';
 import getSourceDimensions from '../utils/getSourceDimensions.js';
-import { ShaderDoodleElement } from '../shader-doodle.js';
 
 const IMAGE = 0;
 const VIDEO = 1;
@@ -77,7 +76,11 @@ export default function GeneralTexture(
     } else if (source instanceof HTMLCanvasElement) {
       type = CANVAS;
       imageOnload();
-    } else if (source instanceof ShaderDoodleElement) {
+    } else if (
+      typeof source.init === 'function' &&
+      typeof source.update === 'function' &&
+      typeof source.dispose === 'function'
+    ) {
       source = source.surface.dom;
       type = CANVAS;
       imageOnload();

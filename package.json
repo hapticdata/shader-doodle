@@ -1,5 +1,6 @@
 {
   "name": "shader-doodle",
+  "version": "1.0.0-alpha.20",
   "description": "A friendly web-component for writing and rendering shaders.",
   "license": "MIT",
   "author": "halvves <hi@halvves.com>",
@@ -11,7 +12,6 @@
   "bugs": {
     "url": "https://github.com/halvves/shader-doodle/issues"
   },
-  "version": "1.0.0-alpha.20",
   "main": "dist/shader-doodle.cjs.js",
   "module": "dist/shader-doodle.esm.js",
   "browser": "dist/shader-doodle.umd.js",
@@ -20,23 +20,23 @@
   ],
   "scripts": {
     "build": "rollup -c",
-    "precommit": "lint-staged",
     "dev": "rollup -c -w",
-    "prepublishOnly": "npm run build",
+    "precommit": "lint-staged",
     "pretty": "npm run pretty-src -- \"src/**/*.js\" && npm run pretty-pkg",
     "pretty-pkg": "prettier-package-json --write ./package.json",
-    "pretty-src": "prettier --write"
+    "pretty-src": "prettier --write",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "@ampproject/rollup-plugin-closure-compiler": "^0.24.0",
+    "@ampproject/rollup-plugin-closure-compiler": "^0.27.0",
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
     "husky": "^2.7.0",
     "lint-staged": "^8.2.1",
     "prettier": "^1.18.2",
     "prettier-package-json": "^2.0.1",
-    "rollup": "^1.25.2",
-    "rollup-plugin-babel": "^4.3.3"
+    "rollup": ">=1.27.0",
+    "rollup-plugin-babel": "4.3.3"
   },
   "keywords": [
     "3d",

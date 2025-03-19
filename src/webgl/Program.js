@@ -46,6 +46,20 @@ export default function Program(gl, vs, fs, vertices, shadertoy = false) {
   gl.attachShader(program, fragmentShader);
   gl.linkProgram(program);
 
+  // Check for program linking errors and throw them
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    const linkLog = gl.getProgramInfoLog(program);
+
+    // Cleanup before throwing
+    gl.detachShader(program, vertexShader);
+    gl.detachShader(program, fragmentShader);
+    gl.deleteShader(vertexShader);
+    gl.deleteShader(fragmentShader);
+    gl.deleteProgram(program);
+
+    throw new Error(`WebGL program linking error: ${linkLog}`);
+  }
+
   let name;
   let unit;
   let framebuffer;

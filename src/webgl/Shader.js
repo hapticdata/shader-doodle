@@ -5,9 +5,9 @@ export default function Shader(gl, type, source) {
 
   // log shader errors
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    const compilationLog = gl.getShaderInfoLog(shader);
+    const info = gl.getShaderInfoLog(shader);
     gl.deleteShader(shader);
-    console.warn(compilationLog, '\nin shader:\n', source);
+    throw new Error(`WebGL shader compilation error: ${info}`);
   }
 
   return shader;
